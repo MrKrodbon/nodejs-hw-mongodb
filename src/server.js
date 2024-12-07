@@ -28,6 +28,7 @@ export const setupServer = () => {
     const data = await getAllContacts();
     res.status(200).json({
       status: 200,
+      message: 'Successfully found contacts!',
       message: data,
     });
   });
