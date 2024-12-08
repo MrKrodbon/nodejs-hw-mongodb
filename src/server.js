@@ -3,6 +3,7 @@ import cors from 'cors';
 import pino from 'pino-http';
 import dotnev from 'dotenv';
 import { getAllContacts, getContactById } from './services/contacts.js';
+import mongoose from 'mongoose';
 
 dotnev.config();
 const PORT = Number(process.env.PORT);
@@ -35,19 +36,44 @@ export const setupServer = () => {
 
   app.get('/contacts/:contactId', async (req, res, next) => {
     const { contactId } = req.params;
+    // try {
+    //   const data = await getContactById(contactId);
+    //   if (!data) {
+    //     return res.status(404).json({
+    //       status: 404,
+    //       message: 'Contact not found',
+    //     });
+    //   }
 
-    const data = await getContactById(contactId);
-    if (!data) {
-      return res.status(404).json({
-        status: 404,
-        message: 'Contact not found',
+    //   res.json({
+    //     status: 200,
+    //     message: `Successfully found contact with id ${contactId}!`,
+    //     data,
+    //   });
+    // } catch (error) {
+    //   // Логування помилки та передача далі
+    //   console.error(error);
+    //   next(error);
+    // }
+
+    try {
+      if (!mongoose.Types.ObjectId.isValid(contactId)) {
+        return res.status(404).json({
+          message: 'Contact not found',
+        });
+      }
+
+      const data = await getContactById(contactId);
+
+      res.json({
+        status: 200,
+        message: `Successfully found contact with id ${contactId}!`,
+        data,
       });
+    } catch (error) {
+      console.log(error);
+      next(error);
     }
-    res.status(200).json({
-      status: 200,
-      message: `Successfully found contact with id ${contactId}!`,
-      data: data,
-    });
   });
 
   app.use('*', (req, res) => {
