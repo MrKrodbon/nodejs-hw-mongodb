@@ -36,25 +36,6 @@ export const setupServer = () => {
 
   app.get('/contacts/:contactId', async (req, res, next) => {
     const { contactId } = req.params;
-    // try {
-    //   const data = await getContactById(contactId);
-    //   if (!data) {
-    //     return res.status(404).json({
-    //       status: 404,
-    //       message: 'Contact not found',
-    //     });
-    //   }
-
-    //   res.json({
-    //     status: 200,
-    //     message: `Successfully found contact with id ${contactId}!`,
-    //     data,
-    //   });
-    // } catch (error) {
-    //   // Логування помилки та передача далі
-    //   console.error(error);
-    //   next(error);
-    // }
 
     try {
       if (!mongoose.Types.ObjectId.isValid(contactId)) {
@@ -64,7 +45,12 @@ export const setupServer = () => {
       }
 
       const data = await getContactById(contactId);
-
+      if (!data) {
+        res.status(404).json({
+          status: 404,
+          message: 'Contact not found',
+        });
+      }
       res.json({
         status: 200,
         message: `Successfully found contact with id ${contactId}!`,
