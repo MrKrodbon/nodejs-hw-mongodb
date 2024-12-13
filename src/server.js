@@ -2,8 +2,10 @@ import express from 'express';
 import cors from 'cors';
 import pino from 'pino-http';
 import dotnev from 'dotenv';
-import { getAllContacts, getContactById } from './services/contacts.js';
-import mongoose from 'mongoose';
+
+import router from './routers/contacts.js';
+import { getContactByIdController } from './controllers/contacts.js';
+import { ctrlWrapper } from './utils/ctrlWrapper.js';
 
 dotnev.config();
 const PORT = Number(process.env.PORT);
@@ -25,42 +27,9 @@ export const setupServer = () => {
     console.log("it's work!");
   });
 
-  app.get('/contacts', async (req, res, next) => {
-    const data = await getAllContacts();
-    res.status(200).json({
-      status: 200,
-      message: 'Successfully found contacts!',
-      data: data,
-    });
-  });
+  router.get('/contacts', ctrlWrapper(getAllContactsController));
 
-  app.get('/contacts/:contactId', async (req, res, next) => {
-    const { contactId } = req.params;
-
-    try {
-      if (!mongoose.Types.ObjectId.isValid(contactId)) {
-        return res.status(404).json({
-          message: 'Contact not found',
-        });
-      }
-
-      const data = await getContactById(contactId);
-      if (!data) {
-        res.status(404).json({
-          status: 404,
-          message: 'Contact not found',
-        });
-      }
-      res.json({
-        status: 200,
-        message: `Successfully found contact with id ${contactId}!`,
-        data,
-      });
-    } catch (error) {
-      console.log(error);
-      next(error);
-    }
-  });
+  router.get('/contacts/:contactId', ctrlWrapper(getContactByIdController));
 
   app.use('*', (req, res) => {
     res.status(404).json({ message: 'Page not found' });
