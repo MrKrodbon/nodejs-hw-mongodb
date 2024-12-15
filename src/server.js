@@ -1,11 +1,10 @@
-import express from 'express';
+import express, { json } from 'express';
 import cors from 'cors';
-import pino from 'pino-http';
 import dotnev from 'dotenv';
-
-import router from './routers/contacts.js';
-import { getContactByIdController } from './controllers/contacts.js';
-import { ctrlWrapper } from './utils/ctrlWrapper.js';
+import contactsRouter from './routers/contacts.js';
+import { logger } from './middleware/logger.js';
+import { notFountHandler } from './middleware/notFoundHandler.js';
+import { errorHandler } from './middleware/errorHandler.js';
 
 dotnev.config();
 const PORT = Number(process.env.PORT);
@@ -15,23 +14,17 @@ export const setupServer = () => {
 
   app.use(cors());
 
-  app.use(
-    pino({
-      transport: {
-        target: 'pino-pretty',
-      },
-    }),
-  );
+  app.use(express.json());
+
+  app.use(logger);
 
   app.listen(PORT, () => {
     console.log("it's work!");
   });
 
-  router.get('/contacts', ctrlWrapper(getAllContactsController));
+  app.use(contactsRouter);
 
-  router.get('/contacts/:contactId', ctrlWrapper(getContactByIdController));
+  app.use(notFountHandler);
 
-  app.use('*', (req, res) => {
-    res.status(404).json({ message: 'Page not found' });
-  });
+  app.use(errorHandler);
 };
