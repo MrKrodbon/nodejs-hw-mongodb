@@ -3,7 +3,7 @@ import cors from 'cors';
 import dotnev from 'dotenv';
 import contactsRouter from './routers/contacts.js';
 import { logger } from './middleware/logger.js';
-import { notFountHandler } from './middleware/notFoundHandler.js';
+import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
 dotnev.config();
@@ -24,7 +24,7 @@ export const setupServer = () => {
 
   app.use(contactsRouter);
 
-  app.use(notFountHandler);
+  app.use(notFoundHandler);
 
   app.use(errorHandler);
 };
