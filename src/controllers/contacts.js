@@ -1,9 +1,13 @@
 import createHttpError from 'http-errors';
 import * as services from '../services/contacts.js';
 import mongoose from 'mongoose';
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 
 export const getAllContactsController = async (req, res, next) => {
-  const data = await services.getAllContacts();
+  const { page, perPage } = parsePaginationParams(req.query);
+
+  const data = await services.getAllContacts({ page, perPage });
+
   res.status(200).json({
     status: 200,
     message: 'Successfully found contacts!',
@@ -31,6 +35,8 @@ export const getContactByIdController = async (req, res, next) => {
 export const createContactController = async (req, res, next) => {
   const contact = await req.body;
   const data = await services.createContact(contact);
+
+  console.log(validationResult);
 
   res.status(201).json({
     status: 201,
