@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-import { typeList } from '../constants/contacts.js';
+import { TYPE_LIST } from '../constants/contacts.js';
 
 export const contactsAddSchema = Joi.object({
   name: Joi.string().min(3).max(20).required(),
@@ -10,7 +10,7 @@ export const contactsAddSchema = Joi.object({
   contactType: Joi.string()
     .min(3)
     .max(20)
-    .valid(...typeList)
+    .valid(...TYPE_LIST)
     .required()
     .default('personal'),
 });
@@ -23,5 +23,5 @@ export const contactsUpdateSchema = Joi.object({
   contactType: Joi.string()
     .min(2)
     .max(20)
-    .valid(...typeList),
+    .valid(...TYPE_LIST),
 });

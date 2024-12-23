@@ -2,16 +2,23 @@ import createHttpError from 'http-errors';
 import * as services from '../services/contacts.js';
 import mongoose from 'mongoose';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { parsedSortOrderParams } from '../utils/parseSortOrderParams.js';
 
 export const getAllContactsController = async (req, res, next) => {
   const { page, perPage } = parsePaginationParams(req.query);
+  const { sortOrder, sortBy } = parsedSortOrderParams(req.query);
 
-  const data = await services.getAllContacts({ page, perPage });
+  const data = await services.getAllContacts({
+    page,
+    perPage,
+    sortOrder,
+    sortBy,
+  });
 
   res.status(200).json({
     status: 200,
     message: 'Successfully found contacts!',
-    data: data,
+    data,
   });
 };
 
