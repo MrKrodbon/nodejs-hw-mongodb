@@ -17,8 +17,7 @@ const parseTypeList = (typeList) => {
 
   if (!isString) return;
 
-  const parsedTypeList = (typeList) =>
-    ['work', 'home', 'personal'].includes(typeList);
+  const parsedTypeList = (type) => ['work', 'home', 'personal'].includes(type);
 
   if (parsedTypeList(typeList)) return typeList;
 };
