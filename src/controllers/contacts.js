@@ -3,16 +3,19 @@ import * as services from '../services/contacts.js';
 import mongoose from 'mongoose';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parsedSortOrderParams } from '../utils/parseSortOrderParams.js';
+import { parseFilterParams } from '../utils/parseFilterParams.js';
 
 export const getAllContactsController = async (req, res, next) => {
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortOrder, sortBy } = parsedSortOrderParams(req.query);
+  const filter = parseFilterParams(req.query);
 
   const data = await services.getAllContacts({
     page,
     perPage,
     sortOrder,
     sortBy,
+    filter,
   });
 
   res.status(200).json({
