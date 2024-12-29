@@ -5,6 +5,7 @@ import contactsRouter from './routers/contacts.js';
 import { logger } from './middleware/logger.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { errorHandler } from './middleware/errorHandler.js';
+import { authRouter } from './routers/auth.js';
 
 dotnev.config();
 const PORT = Number(process.env.PORT);
@@ -23,6 +24,8 @@ export const setupServer = () => {
   });
 
   app.use(contactsRouter);
+
+  app.use(authRouter);
 
   app.use(notFoundHandler);
 
