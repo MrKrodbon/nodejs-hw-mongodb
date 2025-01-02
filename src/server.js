@@ -6,6 +6,7 @@ import { logger } from './middleware/logger.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { authRouter } from './routers/auth.js';
+import cookieParser from 'cookie-parser';
 
 dotnev.config();
 const PORT = Number(process.env.PORT);
@@ -14,6 +15,8 @@ export const setupServer = () => {
   const app = express();
 
   app.use(cors());
+
+  app.use(cookieParser());
 
   app.use(express.json());
 
