@@ -1,14 +1,14 @@
 import * as services from '../services/auth.js';
 
 const setupSession = (res, session) => {
-  res.cookie('sessionId', session.sessionId, {
+  res.cookie('sessionId', session.id, {
     httpOnly: true,
-    expires: new Date(Date.now() + new Date(REFRESH_TOKEN_VALID_UNTIL)),
+    expires: session.refreshTokenValidUntil,
   });
 
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
-    expires: new Date(Date.now() + new Date(REFRESH_TOKEN_VALID_UNTIL)),
+    expires: session.refreshTokenValidUntil,
   });
 };
 
@@ -25,12 +25,7 @@ export const registerController = async (req, res, next) => {
 export const loginController = async (req, res, next) => {
   const session = await services.loginUser(req.body);
 
-  res.cookie('sessionId', session.id, { httpOnly: true });
-
-  res.cookie('refreshToken', session.refreshToken, {
-    httpOnly: true,
-    expires: session.refreshTokenValidUntil,
-  });
+  setupSession(res, session);
 
   res.status(200).json({
     status: 200,
@@ -40,9 +35,11 @@ export const loginController = async (req, res, next) => {
 };
 
 export const refreshController = async (req, res, next) => {
+  const { refreshToken, sessionId } = req.cookies;
+
   const session = await services.refreshUsersSession({
-    refreshToken: req.cookies.refreshToken,
-    sessionId: req.cookies.sessionId,
+    sessionId: sessionId,
+    refreshToken: refreshToken,
   });
 
   setupSession(res, session);
@@ -52,4 +49,12 @@ export const refreshController = async (req, res, next) => {
     message: 'Successfully refreshed a session!',
     data: session.accessToken,
   });
+};
+
+export const logoutController = async (req, res, next) => {
+  const { sessionId } = req.cookies;
+
+  await services.logoutUserSesion({ sessionId });
+
+  res.status(204).send();
 };
