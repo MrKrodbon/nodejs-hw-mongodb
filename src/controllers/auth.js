@@ -13,12 +13,12 @@ const setupSession = (res, session) => {
 };
 
 export const registerController = async (req, res, next) => {
-  const data = await services.registerUser(req.body);
+  const registeredUser = await services.registerUser(req.body);
 
   res.status(201).json({
     status: 201,
     message: 'Successfully registered a user!',
-    data: data,
+    data: registeredUser,
   });
 };
 
@@ -30,7 +30,7 @@ export const loginController = async (req, res, next) => {
   res.status(200).json({
     status: 200,
     message: 'Successfully logged in a user!',
-    data: session.accessToken,
+    data: { accessToken: session.accessToken },
   });
 };
 
