@@ -17,3 +17,7 @@ authRouter.post(
   validateBody(authLoginSchema),
   ctrlWrapper(controllers.loginController),
 );
+
+authRouter.post('/auth/refresh', ctrlWrapper(controllers.refreshController));
+
+authRouter.post('/auth/logout', ctrlWrapper(controllers.logoutController));
