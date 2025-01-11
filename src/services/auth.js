@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
 import createHttpError from 'http-errors';
-import { UserCollection } from '../db/models/user.js';
+import { UserCollection } from '../db/models/User.js';
 import { SessionCollection } from '../db/models/Session.js';
 import {
   ACCESS_TOKEN_VALID_UNTIL,
