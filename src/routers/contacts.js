@@ -9,6 +9,7 @@ import { isValidId } from '../middleware/isValidId.js';
 import { validateBody } from '../utils/validateBody.js';
 
 import { authenticate } from '../middleware/authenticate.js';
+import { upload } from '../middleware/upload.js';
 
 const router = Router();
 
@@ -24,6 +25,7 @@ router.get(
 
 router.post(
   '/contacts',
+  upload.single('poster'),
   validateBody(contactsAddSchema),
   ctrlWrapper(controllers.createContactController),
 );
@@ -31,6 +33,7 @@ router.post(
 router.patch(
   '/contacts/:contactId',
   isValidId,
+  upload.single('poster'),
   validateBody(contactsUpdateSchema),
   ctrlWrapper(controllers.updateContactController),
 );

@@ -51,10 +51,30 @@ export const refreshController = async (req, res, next) => {
   });
 };
 
+export const requestResetEmailController = async (req, res) => {
+  await services.requestResetToken(req.body.email);
+
+  res.json({
+    status: 200,
+    message: 'Reset password email was successfully sent!',
+    data: {},
+  });
+};
+
 export const logoutController = async (req, res, next) => {
   const { sessionId } = req.cookies;
 
   await services.logoutUserSesion({ sessionId });
 
   res.status(204).send();
+};
+
+export const resetPasswordController = async (req, res, next) => {
+  await services.resetPassword(req.body);
+
+  res.status(200).json({
+    status: 200,
+    message: 'Password has been successfully reset.',
+    data: {},
+  });
 };
