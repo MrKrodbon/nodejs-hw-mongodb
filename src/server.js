@@ -7,6 +7,7 @@ import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { authRouter } from './routers/auth.js';
 import cookieParser from 'cookie-parser';
+import { UPLOADS_DIR } from './constants/index.js';
 
 dotnev.config();
 const PORT = Number(process.env.PORT);
@@ -23,10 +24,11 @@ export const setupServer = () => {
   app.use(logger);
 
   app.listen(PORT, () => {
-    console.log("it's work!");
+    console.log(`it's work on PORT ${PORT}!`);
   });
 
   app.use(authRouter);
+  app.use('/uploads', express.static(UPLOADS_DIR));
 
   app.use(contactsRouter);
 
