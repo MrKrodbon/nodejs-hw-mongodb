@@ -29,7 +29,7 @@ const contactsSchema = new Schema(
       ref: 'user',
       required: true,
     },
-    poster: {
+    photo: {
       type: String,
     },
   },
