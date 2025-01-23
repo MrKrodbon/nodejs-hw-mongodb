@@ -1,4 +1,5 @@
 import * as services from '../services/auth.js';
+import { generateOAuthURL } from '../utils/googleOAuth2.0.js';
 
 const setupSession = (res, session) => {
   res.cookie('sessionId', session.id, {
@@ -12,7 +13,7 @@ const setupSession = (res, session) => {
   });
 };
 
-export const registerController = async (req, res, next) => {
+export const registerController = async (req, res) => {
   const registeredUser = await services.registerUser(req.body);
 
   res.status(201).json({
@@ -22,7 +23,7 @@ export const registerController = async (req, res, next) => {
   });
 };
 
-export const loginController = async (req, res, next) => {
+export const loginController = async (req, res) => {
   const session = await services.loginUser(req.body);
 
   setupSession(res, session);
@@ -34,7 +35,7 @@ export const loginController = async (req, res, next) => {
   });
 };
 
-export const refreshController = async (req, res, next) => {
+export const refreshController = async (req, res) => {
   const { refreshToken, sessionId } = req.cookies;
 
   const session = await services.refreshUsersSession({
@@ -61,7 +62,7 @@ export const requestResetEmailController = async (req, res) => {
   });
 };
 
-export const logoutController = async (req, res, next) => {
+export const logoutController = async (req, res) => {
   const { sessionId } = req.cookies;
 
   await services.logoutUserSesion({ sessionId });
@@ -69,12 +70,38 @@ export const logoutController = async (req, res, next) => {
   res.status(204).send();
 };
 
-export const resetPasswordController = async (req, res, next) => {
+export const resetPasswordController = async (req, res) => {
   await services.resetPassword(req.body);
 
   res.status(200).json({
     status: 200,
     message: 'Password has been successfully reset.',
     data: {},
+  });
+};
+
+export const getGoogleOauthUrlController = async (req, res) => {
+  const url = await generateOAuthURL();
+
+  res.json({
+    status: 200,
+    message: 'Succesfullty get OAuth url',
+    data: {
+      url,
+    },
+  });
+};
+
+export const loginWithGoogleController = async (req, res) => {
+  const { code } = req.body;
+
+  const session = await services.loginOrRegisterWithGoogle(code);
+
+  setupSession(res, session);
+
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully logged in a user with Google!',
+    data: { accessToken: session.accessToken },
   });
 };

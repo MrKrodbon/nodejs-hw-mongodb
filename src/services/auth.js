@@ -15,6 +15,10 @@ import { sendMail } from '../utils/sendMail.js';
 import handlebars from 'handlebars';
 import path from 'node:path';
 import fs from 'node:fs/promises';
+import {
+  getUsernaemFormGoogleTokenPayload,
+  validateCode,
+} from '../utils/googleOAuth2.0.js';
 
 const getTokenToReset = (user, email) => {
   return jwt.sign(
@@ -184,4 +188,28 @@ export const resetPassword = async (payload) => {
       password: encryptedPassword,
     },
   );
+};
+
+export const loginOrRegisterWithGoogle = async (code) => {
+  const ticket = await validateCode(code);
+  const payload = ticket.getPayload();
+
+  let user = await UserCollection.findOne({ email: payload.email });
+  let password = randomBytes(30).toString('base64');
+  const encryptedPassword = await bcrypt.hash(password, 10);
+  if (!user) {
+    const userName = getUsernaemFormGoogleTokenPayload(payload);
+    user = await UserCollection.create({
+      email: payload.email,
+      name: userName,
+      password: encryptedPassword,
+    });
+  }
+
+  const session = await createSession();
+
+  return await SessionCollection.create({
+    userId: user.id,
+    ...session,
+  });
 };
