@@ -48,24 +48,32 @@ export const getContactByIdController = async (req, res) => {
   });
 };
 
+const saveToCloudinaryFeatureFlag = async (photo, isCloudinaryEnable) => {
+  let photoUrl;
+  if (isCloudinaryEnable) {
+    photoUrl = await saveFileToCloudinary(photo);
+  } else {
+    photoUrl = await saveFileToUploadsDir(photo);
+  }
+
+  return photoUrl;
+};
+
 export const createContactController = async (req, res) => {
   const contact = await req.body;
-  let poster = req.file;
+  let photo = req.file;
   let photoUrl = null;
-
   let isCloudinaryEnable = getEnvVar('CLOUDINARY_ENABLE');
 
-  if (isCloudinaryEnable) {
-    photoUrl = await saveFileToCloudinary(poster);
-  } else {
-    photoUrl = await saveFileToUploadsDir(poster);
+  if (photo) {
+    photoUrl = await saveToCloudinaryFeatureFlag(photo, isCloudinaryEnable);
   }
 
   const { _id: userId } = req.user;
 
   const data = await services.createContact({
     ...contact,
-    poster: photoUrl,
+    photo: photoUrl,
     userId,
   });
 
@@ -80,7 +88,20 @@ export const updateContactController = async (req, res) => {
   const { contactId } = req.params;
   const { _id: userId } = req.user;
 
-  const data = await services.updateContact(contactId, userId, req.body);
+  let photo = req.file;
+  let photoUrl;
+  let isCloudinaryEnable = getEnvVar('CLOUDINARY_ENABLE');
+
+  if (photo) {
+    photoUrl = await saveToCloudinaryFeatureFlag(photo, isCloudinaryEnable);
+  }
+
+  const data = await services.updateContact(
+    contactId,
+    userId,
+    photoUrl,
+    req.body,
+  );
 
   if (!data) throw createHttpError(404, 'Contact not found');
 
