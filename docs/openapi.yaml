@@ -11,6 +11,7 @@ tags:
     description: operation about contacts
   # теги, що ви будете використовувати
 servers:
+  - url: https://nodejs-hw-mongodb-4-tlwh.onrender.com
   - url: http://localhost:3000
 #  - url: #посилання на задеплоєний сайт
 paths:
