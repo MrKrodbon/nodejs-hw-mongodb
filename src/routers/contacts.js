@@ -15,23 +15,23 @@ const router = Router();
 
 router.use(authenticate);
 
-router.get('/contacts', ctrlWrapper(controllers.getAllContactsController));
+router.get('/', ctrlWrapper(controllers.getAllContactsController));
 
 router.get(
-  '/contacts/:contactId',
+  '/:contactId',
   isValidId,
   ctrlWrapper(controllers.getContactByIdController),
 );
 
 router.post(
-  '/contacts',
+  '/',
   upload.single('photo'),
   validateBody(contactsAddSchema),
   ctrlWrapper(controllers.createContactController),
 );
 
 router.patch(
-  '/contacts/:contactId',
+  '/:contactId',
   isValidId,
   upload.single('photo'),
   validateBody(contactsUpdateSchema),
@@ -39,7 +39,7 @@ router.patch(
 );
 
 router.delete(
-  '/contacts/:contactId',
+  '/:contactId',
   isValidId,
   ctrlWrapper(controllers.deleteContactController),
 );

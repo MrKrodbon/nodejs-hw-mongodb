@@ -6,6 +6,7 @@ import { logger } from './middleware/logger.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { authRouter } from './routers/auth.js';
+import { swaggerDocs } from './middleware/swaggerDocs.js';
 import cookieParser from 'cookie-parser';
 import { UPLOADS_DIR } from './constants/index.js';
 
@@ -27,10 +28,12 @@ export const setupServer = () => {
     console.log(`it's work on PORT ${PORT}!`);
   });
 
-  app.use(authRouter);
+  app.use('/auth', authRouter);
   app.use('/uploads', express.static(UPLOADS_DIR));
 
-  app.use(contactsRouter);
+  app.use('/contacts', contactsRouter);
+
+  app.use('/api-docs', swaggerDocs());
 
   app.use(notFoundHandler);
 
