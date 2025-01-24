@@ -7,11 +7,16 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   description: An application for working with a collection of contacts, which will allow you to receive data from all contacts or one by id using HTTP requests.
 tags:
+  - name: Contacts
+    description: operation about contacts
   # теги, що ви будете використовувати
 servers:
   - url: http://localhost:3000
-  - url: #посилання на задеплоєний сайт
+#  - url: #посилання на задеплоєний сайт
 paths:
+  /contacts:
+    get:
+      $ref: ../swagger/paths/contacts/get.yaml
   # тут будуть посилання на ендпоінти
 components:
   securitySchemes:

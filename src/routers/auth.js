@@ -13,40 +13,40 @@ import * as controllers from '../controllers/auth.js';
 export const authRouter = Router();
 
 authRouter.post(
-  '/auth/register',
+  '/register',
   validateBody(authRegisterSchema),
   ctrlWrapper(controllers.registerController),
 );
 
 authRouter.post(
-  '/auth/login',
+  '/login',
   validateBody(authLoginSchema),
   ctrlWrapper(controllers.loginController),
 );
 
-authRouter.post('/auth/refresh', ctrlWrapper(controllers.refreshController));
+authRouter.post('/refresh', ctrlWrapper(controllers.refreshController));
 
-authRouter.post('/auth/logout', ctrlWrapper(controllers.logoutController));
+authRouter.post('/logout', ctrlWrapper(controllers.logoutController));
 
 authRouter.post(
-  '/auth/send-reset-email',
+  '/send-reset-email',
   validateBody(requestResendEmailSchema),
   ctrlWrapper(controllers.requestResetEmailController),
 );
 
 authRouter.post(
-  '/auth/reset-pwd',
+  '/reset-pwd',
   validateBody(resetPasswordSchema),
   ctrlWrapper(controllers.resetPasswordController),
 );
 
 authRouter.get(
-  '/auth/get-oauth-url',
+  '/get-oauth-url',
   ctrlWrapper(controllers.getGoogleOauthUrlController),
 );
 
 authRouter.post(
-  '/auth/config-oauth',
+  '/config-oauth',
   validateBody(googleOAuthValidateSchema),
   ctrlWrapper(controllers.loginWithGoogleController),
 );
