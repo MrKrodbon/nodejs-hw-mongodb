@@ -71,15 +71,6 @@
           },
           {
             "in": "query",
-            "name": "isFavourite",
-            "schema": {
-              "type": "boolean",
-              "example": false
-            },
-            "description": "Is there a contact favorite"
-          },
-          {
-            "in": "query",
             "name": "sortBy",
             "required": true,
             "schema": {
@@ -87,20 +78,6 @@
               "example": "id"
             },
             "description": "All contacts fields can be mentioned. _id - is default"
-          },
-          {
-            "in": "query",
-            "name": "filter",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "work",
-                "home",
-                "personal"
-              ],
-              "example": "work"
-            }
           }
         ],
         "responses": {
