@@ -1,5 +1,5 @@
 # swagger/components/responses/401.yaml
-description: Unauthorized error
+description: Not found source
 content:
   application/json:
     schema:
@@ -11,10 +11,10 @@ content:
       properties:
         status:
           type: integer
-          example: 401
+          example: 404
         message:
           type: string
-          example: UnauthorizedError
+          example: Not Found source
         data:
           type: object
           required:
@@ -22,4 +22,4 @@ content:
           properties:
             message:
               type: string
-              example: 'Access token expired'
+              example: 'Not found source'

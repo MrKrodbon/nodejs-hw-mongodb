@@ -18,8 +18,8 @@ properties:
     example: 'John Doe'
   phoneNumber:
     description: "Contact's phone number"
-    type: string
-    example: '111 22 33 44'
+    type: number
+    example: +380*******
   contactType:
     description: "Contact's type"
     type: string
