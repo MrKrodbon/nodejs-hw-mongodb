@@ -1,5 +1,5 @@
 # swagger/components/responses/401.yaml
-description: Unauthorized error
+description: Not valid id
 content:
   application/json:
     schema:
@@ -11,10 +11,10 @@ content:
       properties:
         status:
           type: integer
-          example: 401
+          example: 400
         message:
           type: string
-          example: UnauthorizedError
+          example: Not valid id
         data:
           type: object
           required:
@@ -22,4 +22,4 @@ content:
           properties:
             message:
               type: string
-              example: 'Access token expired'
+              example: 'Not valid id'
